@@ -1,27 +1,31 @@
 package com.rodrigohf.apicompras.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rodrigohf.apicompras.domain.Categoria;
+import com.rodrigohf.apicompras.services.CategoriaService;
 
 @RestController
 @RequestMapping(value="/categorias")
 public class CategoriaController {
 	
-	@GetMapping
-	public List<Categoria> listar() {
-		Categoria cat1 = new Categoria(1L, "Informática");
-		Categoria cat2 = new Categoria(2L, "Escritório");
+	@Autowired
+	private CategoriaService catService;
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Categoria> listarCategoriaPorId(@PathVariable Long id){
 		
-		List<Categoria> listar = new ArrayList<>();
-		listar.add(cat1);
-		listar.add(cat2);
-		return listar;
+		Categoria obj = catService.listarCategoriaPorId(id);
+		
+		return ResponseEntity.ok().body(obj);
+		
 	}
 
 }
