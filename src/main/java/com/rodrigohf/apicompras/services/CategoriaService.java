@@ -16,7 +16,8 @@ public class CategoriaService {
 
 	public Categoria listarCategoriaPorId(Long id) {
 		Optional<Categoria> obj = catRepo.findById(id);
-		return obj.get();
+		return obj
+				.orElseThrow(()-> new RuntimeException("Objeto ID "+ id + " não Encontrado!!!"));
 	}
 
 }
