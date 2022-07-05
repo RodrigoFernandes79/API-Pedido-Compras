@@ -9,8 +9,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.rodrigohf.apicompras.domain.Categoria;
+import com.rodrigohf.apicompras.domain.Cidade;
+import com.rodrigohf.apicompras.domain.Estado;
 import com.rodrigohf.apicompras.domain.Produto;
 import com.rodrigohf.apicompras.repositories.CategoriaRepository;
+import com.rodrigohf.apicompras.repositories.CidadeRepository;
+import com.rodrigohf.apicompras.repositories.EstadoRepository;
 import com.rodrigohf.apicompras.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -20,6 +24,10 @@ public class ApicomprasApplication implements CommandLineRunner{
 	private CategoriaRepository catRepo;
 	@Autowired
 	private ProdutoRepository prodRepo;
+	@Autowired
+	private CidadeRepository cidRepo;
+	@Autowired
+	private EstadoRepository estRepo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApicomprasApplication.class, args);
@@ -50,6 +58,22 @@ public class ApicomprasApplication implements CommandLineRunner{
 		
 		catRepo.saveAll(Arrays.asList(cat1,cat2));
 		prodRepo.saveAll(Arrays.asList(p1,p2,p3));
+		
+		Estado est1 = new Estado(null,"Minas Gerais");
+		Estado est2 = new Estado(null, "São Paulo");
+		
+		Cidade c1 = new Cidade(null, "Uberlândia", est1);
+		Cidade c2 = new Cidade(null,"São Paulo", est2);
+		Cidade c3 = new Cidade(null,"Campinas", est2);
+		
+		est1.getCidades().addAll(Arrays.asList(c1));
+		est2.getCidades().addAll(Arrays.asList(c2,c3));
+		
+		
+		estRepo.saveAll(Arrays.asList(est1,est2));
+		cidRepo.saveAll(Arrays.asList(c1,c2,c3));
+		
+		
 		
 	}
 
