@@ -7,11 +7,11 @@ public enum TipoCliente {
 	
 	
 
-	private int cod;
+	private Integer cod;
 	private String descricao;
 	
 	
-	private TipoCliente(int cod, String descricao) {
+	private TipoCliente(Integer cod, String descricao) {
 		this.cod = cod;
 		this.descricao = descricao;
 	}
@@ -34,7 +34,7 @@ public enum TipoCliente {
 		}
 		
 		for (TipoCliente x : TipoCliente.values()) {
-			if(cod.equals(x)) {
+			if(cod.equals(x.getCod())) {
 				return x;
 			}
 		}
