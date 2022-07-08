@@ -20,4 +20,11 @@ public class CategoriaService {
 				.orElseThrow(()-> new RuntimeException("Objeto ID "+ id + " não Encontrado!!!"));
 	}
 
+	public Categoria inserirCategoria(Categoria categoria) {
+		
+		Categoria obj = catRepo.save(categoria);
+		
+		return obj;
+	}
+
 }
