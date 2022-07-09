@@ -2,6 +2,9 @@ package com.rodrigohf.apicompras.services.exceptions;
 
 import java.time.LocalDateTime;
 
+
+
+
 public class ApiException {
 
 	private LocalDateTime localDate;
@@ -9,6 +12,9 @@ public class ApiException {
 	private Integer status;
 	private String path;
 	
+	
+	
+
 	public ApiException(LocalDateTime localDate, String mensagem, Integer status, String path) {
 		super();
 		this.localDate = localDate;
@@ -17,6 +23,8 @@ public class ApiException {
 		this.path = path;
 	}
 
+
+
 	public LocalDateTime getLocalDate() {
 		return localDate;
 	}
@@ -24,6 +32,7 @@ public class ApiException {
 	public String getMensagem() {
 		return mensagem;
 	}
+	
 
 	public Integer getStatus() {
 		return status;
