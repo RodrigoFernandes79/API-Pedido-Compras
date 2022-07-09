@@ -27,4 +27,15 @@ public class CategoriaService {
 		return obj;
 	}
 
+	public Categoria atualizarCategoria(Long id,Categoria categoria) {
+		return catRepo.findById(id).map(obj ->{
+			obj.getId();
+			obj.setNome(categoria.getNome());
+		
+		
+		Categoria cat= catRepo.save(obj);
+		return cat;
+	}).orElseThrow(() -> new RuntimeException("Objeto ID "+ id + " não Encontrado!!!"));
+	
+}
 }
