@@ -5,6 +5,8 @@ package com.rodrigohf.apicompras.controllers;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -42,9 +44,9 @@ public class CategoriaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Categoria> inserirCategoria(@RequestBody Categoria categoria){
-		
-		Categoria obj = catService.inserirCategoria(categoria);
+	public ResponseEntity<Categoria> inserirCategoria(@Valid @RequestBody CategoriaDTO categoriaDTO){
+		Categoria objDTO = catService.fromDTO(categoriaDTO);
+		Categoria obj = catService.inserirCategoria(objDTO);
 		
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -55,9 +57,9 @@ public class CategoriaController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Categoria> atualizarCategoria(@PathVariable Long id,@RequestBody Categoria categoria){
-		
-		Categoria obj = catService.atualizarCategoria(id,categoria);
+	public ResponseEntity<Categoria> atualizarCategoria(@PathVariable Long id, @Valid @RequestBody CategoriaDTO categoriaDTO){
+		Categoria objDTO = catService.fromDTO(categoriaDTO);
+		Categoria obj = catService.atualizarCategoria(id,objDTO);
 		
 		return ResponseEntity.ok().body(obj);
 	}

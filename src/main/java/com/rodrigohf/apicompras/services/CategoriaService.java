@@ -26,8 +26,9 @@ public class CategoriaService {
 		return obj.orElseThrow(() -> new RuntimeException("Objeto ID " + id + " não Encontrado!!!"));
 	}
 
-	public Categoria inserirCategoria(Categoria categoria) {
-
+	public Categoria inserirCategoria( Categoria categoria) {
+       
+		
 		Categoria obj = catRepo.save(categoria);
 
 		return obj;
@@ -37,7 +38,7 @@ public class CategoriaService {
 		return catRepo.findById(id).map(obj -> {
 			obj.getId();
 			obj.setNome(categoria.getNome());
-
+			
 			Categoria cat = catRepo.save(obj);
 			return cat;
 		}).orElseThrow(() -> new RuntimeException("Objeto ID " + id + " não Encontrado!!!"));
@@ -75,5 +76,10 @@ public class CategoriaService {
 		Page<CategoriaDTO> objListDTO = objList.map(obj-> new CategoriaDTO(obj));
 		
 		return objListDTO;
+	}
+	
+	//método auxiliar para instanciar Categoria a partir do objeto CategoriaDTO 
+	public Categoria fromDTO(CategoriaDTO categoriaDTO) {
+		return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
 	}
 }
