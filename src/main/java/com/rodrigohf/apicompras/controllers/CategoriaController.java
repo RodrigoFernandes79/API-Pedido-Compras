@@ -3,6 +3,7 @@ package com.rodrigohf.apicompras.controllers;
 
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.rodrigohf.apicompras.domain.Categoria;
+import com.rodrigohf.apicompras.dtos.CategoriaDTO;
 import com.rodrigohf.apicompras.services.CategoriaService;
 
 @RestController
@@ -63,4 +65,16 @@ public class CategoriaController {
 	public void deletarCategoriaPorId(@PathVariable Long id) {
 		catService.deletarCategoriaPorId(id);
 	}
+	
+	@GetMapping
+	public ResponseEntity<List<CategoriaDTO>> listarCategoria(){
+		
+		List<CategoriaDTO> objListDTO = catService.listarCategoria();
+		
+		
+		return ResponseEntity.ok().body(objListDTO);
+	}
+
+	
 }
+
