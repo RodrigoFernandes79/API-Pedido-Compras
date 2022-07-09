@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.rodrigohf.apicompras.domain.Categoria;
@@ -61,5 +64,16 @@ public class CategoriaService {
 		
 		return objListDTO;
 		
+	}
+	//Paginação com parâmetros opcionais na requisição(page= n° de paginas, linesPerPage= qtdade de linhas por cada pág,
+	//orderBy = ordenar por qual atributo(id ou nome), direction = ascendente ou descendente) 
+	public Page<CategoriaDTO> listarPaginacao(Integer page, Integer linesPerPage, String orderBy, String direction){
+		
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		
+		Page<Categoria> objList = catRepo.findAll(pageRequest);
+		Page<CategoriaDTO> objListDTO = objList.map(obj-> new CategoriaDTO(obj));
+		
+		return objListDTO;
 	}
 }
