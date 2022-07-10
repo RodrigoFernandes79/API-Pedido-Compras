@@ -63,7 +63,7 @@ public class ClienteService {
 
 		} catch (DataIntegrityViolationException ex) {
 			throw new DataIntegrityViolationException(
-					"Objeto " + id + " Não pode ser apagado pois tem entidades associadas");
+					"Objeto " + id + " Não pode ser apagado pois possui pedidos associados");
 		}
 	}
 
