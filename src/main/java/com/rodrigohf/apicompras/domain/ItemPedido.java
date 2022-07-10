@@ -9,35 +9,41 @@ import javax.persistence.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class ItemPedido implements Serializable{
-	
+public class ItemPedido implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	@JsonIgnore // anotação para não serializar os objetos de pedido e nem de produto
-	@EmbeddedId  // id embutido em um tipo auxiliar (ItemPedidoPK)
-	private ItemPedidoPK id = new ItemPedidoPK(); //o id será um objeto do ItemPedidoPK
-	
+	@EmbeddedId // id embutido em um tipo auxiliar (ItemPedidoPK)
+	private ItemPedidoPK id = new ItemPedidoPK(); // o id será um objeto do ItemPedidoPK
+
 	private Double desconto;
 	private Integer quantidade;
 	private Double preco;
-	
+
 	public ItemPedido() {
-		
+
 	}
 
-	public ItemPedido(Pedido pedido,Produto produto, Double desconto, Integer quantidade, Double preco) {
-		
+	public ItemPedido(Pedido pedido, Produto produto, Double desconto, Integer quantidade, Double preco) {
+
 		id.setPedido(pedido);
 		id.setProduto(produto);
 		this.desconto = desconto;
 		this.quantidade = quantidade;
 		this.preco = preco;
 	}
-	
+
 	@JsonIgnore // para nao fazer a referencia ciclica no endpoint
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
-	
+
+	//Inserindo e calculando o subtotal atraves do metodo getSubTotal()
+	public double getSubTotal() {
+
+		return (preco-desconto)*quantidade;
+	}
+
 	public Produto getProduto() {
 		return id.getProduto();
 	}
@@ -90,8 +96,5 @@ public class ItemPedido implements Serializable{
 		ItemPedido other = (ItemPedido) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
-	
 
 }
