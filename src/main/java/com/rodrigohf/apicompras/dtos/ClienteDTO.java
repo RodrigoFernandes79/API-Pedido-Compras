@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.rodrigohf.apicompras.domain.Cliente;
-import com.rodrigohf.apicompras.services.validations.ClienteInsert;
+
 
 public class ClienteDTO implements Serializable{
 

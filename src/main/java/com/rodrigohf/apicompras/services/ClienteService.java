@@ -1,7 +1,6 @@
 package com.rodrigohf.apicompras.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,7 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Service;
 
 import com.rodrigohf.apicompras.domain.Cidade;
@@ -22,7 +21,7 @@ import com.rodrigohf.apicompras.dtos.ClienteDTO;
 import com.rodrigohf.apicompras.dtos.ClienteNewDTO;
 import com.rodrigohf.apicompras.repositories.ClienteRepository;
 import com.rodrigohf.apicompras.repositories.EnderecoRepository;
-import com.rodrigohf.apicompras.services.exceptions.ApiException;
+
 
 @Service
 public class ClienteService {
