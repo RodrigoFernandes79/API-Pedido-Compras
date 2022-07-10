@@ -7,15 +7,22 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import com.rodrigohf.apicompras.domain.Cliente;
 import com.rodrigohf.apicompras.domain.enums.TipoCliente;
 import com.rodrigohf.apicompras.dtos.ClienteNewDTO;
+import com.rodrigohf.apicompras.repositories.ClienteRepository;
 import com.rodrigohf.apicompras.services.exceptions.ApiException;
 import com.rodrigohf.apicompras.services.validations.utils.BR;
 
 //classe que cria o validator personalizado para CPF ou CNPJ de ClienteNewDTO
 public class CLienteInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
 	@Override
 	public void initialize(ClienteInsert ann) {
 	}
@@ -37,6 +44,13 @@ public class CLienteInsertValidator implements ConstraintValidator<ClienteInsert
 			
 			list.add(new ApiException(LocalDateTime.now(),"Campo CNPJ inválido!", HttpStatus.BAD_REQUEST.value(), null));
 		}
+		
+		//Validar se já existe email no Banco de dados:
+		Cliente find = clienteRepository.findByEmail(objDto.getEmail());
+		if(find != null) {    //se o email já existe no BD:
+			list.add(new ApiException(LocalDateTime.now(),"Email " + objDto.getEmail()+" já existe", HttpStatus.BAD_REQUEST.value(), null));
+		}
+			
 		
 		for (ApiException e : list) {
 			context.disableDefaultConstraintViolation();
