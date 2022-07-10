@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.rodrigohf.apicompras.domain.Cliente;
 import com.rodrigohf.apicompras.dtos.ClienteDTO;
+import com.rodrigohf.apicompras.dtos.ClienteNewDTO;
 import com.rodrigohf.apicompras.services.ClienteService;
 
 @RestController
@@ -41,8 +42,8 @@ public class ClienteController {
 
 	}
 	@PostMapping
-	public ResponseEntity<Cliente> inserirCliente(@Valid @RequestBody ClienteDTO categoriaDTO){
-		Cliente objDTO = clienteService.fromDTO(categoriaDTO);
+	public ResponseEntity<Cliente> inserirCliente(@Valid @RequestBody ClienteNewDTO clienteNewDTO){
+		Cliente objDTO = clienteService.fromDTO(clienteNewDTO);
 		Cliente obj = clienteService.inserirCliente(objDTO);
 		
 		URI uri = ServletUriComponentsBuilder
@@ -54,8 +55,8 @@ public class ClienteController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Cliente> atualizarCliente(@PathVariable Long id, @Valid @RequestBody ClienteDTO categoriaDTO){
-		Cliente objDTO = clienteService.fromDTO(categoriaDTO);
+	public ResponseEntity<Cliente> atualizarCliente(@PathVariable Long id, @Valid @RequestBody ClienteDTO clienteDTO){
+		Cliente objDTO = clienteService.fromDTO(clienteDTO);
 		Cliente obj = clienteService.atualizarCliente(id,objDTO);
 		
 		return ResponseEntity.ok().body(obj);

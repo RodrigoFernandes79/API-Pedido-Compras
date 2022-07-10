@@ -11,15 +11,22 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.rodrigohf.apicompras.domain.Cidade;
 import com.rodrigohf.apicompras.domain.Cliente;
+import com.rodrigohf.apicompras.domain.Endereco;
+import com.rodrigohf.apicompras.domain.enums.TipoCliente;
 import com.rodrigohf.apicompras.dtos.ClienteDTO;
+import com.rodrigohf.apicompras.dtos.ClienteNewDTO;
 import com.rodrigohf.apicompras.repositories.ClienteRepository;
+import com.rodrigohf.apicompras.repositories.EnderecoRepository;
 
 @Service
 public class ClienteService {
 	
 	@Autowired
 	private ClienteRepository clienteRepo;
+	@Autowired
+	private EnderecoRepository enderecoRepo;
 
 	public Cliente listarClientePorId(Long id) {
 		Optional<Cliente> obj = clienteRepo.findById(id);
@@ -30,6 +37,7 @@ public class ClienteService {
 	public Cliente inserirCliente(Cliente Cliente) {
 
 		Cliente obj = clienteRepo.save(Cliente);
+		enderecoRepo.saveAll(obj.getEnderecos());
 
 		return obj;
 	}
@@ -88,6 +96,27 @@ public class ClienteService {
 		return new Cliente(ClienteDTO.getId(), ClienteDTO.getNome(), ClienteDTO.getEmail(), null, null);
 	}
 
+	//Método auxiliar  para instanciar Cliente a partir dos dados do objeto ClienteNewDto(usar para criar novo cliente)
+	public Cliente fromDTO(ClienteNewDTO clienteNewDTO) {
+		Cliente cli = new Cliente(null, clienteNewDTO.getNome(), clienteNewDTO.getEmail(),clienteNewDTO.getCpfOuCnpj(),
+				TipoCliente.toEnum(clienteNewDTO.getTipo()));
+		
+		Cidade cid = new Cidade(clienteNewDTO.getCidadeId(),null,null);
+		
+		Endereco end = new Endereco(null,clienteNewDTO.getLogradouro(),clienteNewDTO.getNumero(),clienteNewDTO.getComplemento(),
+				clienteNewDTO.getBairro(), clienteNewDTO.getCep(), cli, cid);
+		
+		cli.getEnderecos().add(end);
+		
+		cli.getTelefones().add(clienteNewDTO.getTelefone1());
+		if(clienteNewDTO.getTelefone2()!= null) {
+			cli.getTelefones().add(clienteNewDTO.getTelefone2());
+		}
+		if(clienteNewDTO.getTelefone3()!= null) {
+			cli.getTelefones().add(clienteNewDTO.getTelefone3());
+		}
+		return cli;
+	}
 	
 	}
 
