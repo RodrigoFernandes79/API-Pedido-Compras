@@ -27,7 +27,7 @@ public class ProdutoService {
 
 		PageRequest pageRequest = PageRequest.of( page, linesPerPage, Direction.valueOf(direction), orderBy);
 
-		Page<Produto> objList = produtoRepo.listarProdutoPorDescricao(nome.toLowerCase(), pageRequest);
+		Page<Produto> objList = produtoRepo.listarProdutoPorDescricao(nome, pageRequest);
 		
 
 		return objList;
