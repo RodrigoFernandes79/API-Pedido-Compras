@@ -1,5 +1,7 @@
 package com.rodrigohf.apicompras.services;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.rodrigohf.apicompras.domain.Cidade;
@@ -19,6 +22,7 @@ import com.rodrigohf.apicompras.dtos.ClienteDTO;
 import com.rodrigohf.apicompras.dtos.ClienteNewDTO;
 import com.rodrigohf.apicompras.repositories.ClienteRepository;
 import com.rodrigohf.apicompras.repositories.EnderecoRepository;
+import com.rodrigohf.apicompras.services.exceptions.ApiException;
 
 @Service
 public class ClienteService {
@@ -27,6 +31,7 @@ public class ClienteService {
 	private ClienteRepository clienteRepo;
 	@Autowired
 	private EnderecoRepository enderecoRepo;
+	
 
 	public Cliente listarClientePorId(Long id) {
 		Optional<Cliente> obj = clienteRepo.findById(id);
@@ -42,11 +47,17 @@ public class ClienteService {
 		return obj;
 	}
 
-	public Cliente atualizarCliente(Long id, Cliente Cliente) {
+	public Cliente atualizarCliente(Long id, Cliente cliente) {
+		
+		
+		Cliente find = clienteRepo.findByEmail(cliente.getEmail());
+		if(find != null && find.getId()!= id) {    //se o email de outro cliente já existe no BD :
+			throw new DataIntegrityViolationException("Email " +cliente.getEmail()+" já existe no Banco de dados");
+		}
 		return clienteRepo.findById(id).map(obj -> {
 			obj.getId();
-			obj.setNome(Cliente.getNome());
-			obj.setEmail(Cliente.getEmail());
+			obj.setNome(cliente.getNome());
+			obj.setEmail(cliente.getEmail());
 
 			
 			Cliente cat = clienteRepo.save(obj);
