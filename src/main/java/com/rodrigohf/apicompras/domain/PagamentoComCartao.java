@@ -2,8 +2,10 @@ package com.rodrigohf.apicompras.domain;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.rodrigohf.apicompras.domain.enums.EstadoPagamento;
 @Entity
+@JsonTypeName("pagamentoComCartao") // definindo o nome da subclasse que será instanciada na classe pagamento
 public class PagamentoComCartao extends Pagamento{
 	
 	private static final long serialVersionUID = 1L;

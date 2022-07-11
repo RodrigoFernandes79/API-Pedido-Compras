@@ -33,19 +33,29 @@ public class ItemPedido implements Serializable {
 		this.preco = preco;
 	}
 
-	@JsonIgnore // para nao fazer a referencia ciclica no endpoint
-	public Pedido getPedido() {
-		return id.getPedido();
-	}
+	
 
 	//Inserindo e calculando o subtotal atraves do metodo getSubTotal()
 	public double getSubTotal() {
 
 		return (preco-desconto)*quantidade;
 	}
+	
+	@JsonIgnore // para nao fazer a referencia ciclica no endpoint
+	public Pedido getPedido() {
+		return id.getPedido();
+	}
+	
+	public void setPedido(Pedido pedido) {
+		id.setPedido(pedido);
+	}
 
 	public Produto getProduto() {
 		return id.getProduto();
+	}
+	
+	public void setProduto(Produto produto) {
+		 id.setProduto(produto);
 	}
 
 	public ItemPedidoPK getId() {
