@@ -30,7 +30,7 @@ public class ProdutoController {
 		
 	}
 	
-	@GetMapping //localhost//8080/produtos/nome="nome"
+	@GetMapping //localhost/8080/produtos/?nome="nome"
 	public ResponseEntity<Page<Produto>> listarProdutoPorDescricaoPaginacao(
 			@RequestParam(value="nome",required=false) String nome,
 			@RequestParam(value="page",defaultValue = "0") Integer page,
