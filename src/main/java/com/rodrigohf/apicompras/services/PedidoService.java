@@ -57,6 +57,8 @@ public class PedidoService {
 		}
 		itemPedidoRepository.saveAll(pedido.getItens());
 		
+		//automaticamente ele mostra o toString de pedido no log do console(usado para configuraçao de serviço de email)
+		System.out.println(pedido);
 		return pedido;
 		
 	}
