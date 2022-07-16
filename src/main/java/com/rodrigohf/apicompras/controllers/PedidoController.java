@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.rodrigohf.apicompras.domain.Pedido;
-import com.rodrigohf.apicompras.services.PedidoService;
+import com.rodrigohf.apicompras.services.emailServices.PedidoService;
 
 @RestController
 @RequestMapping(value="/pedidos")

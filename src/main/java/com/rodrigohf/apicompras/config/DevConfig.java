@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.rodrigohf.apicompras.services.DataBaseService;
+import com.rodrigohf.apicompras.services.SmtpEmailService;
+import com.rodrigohf.apicompras.services.emailServices.EmailService;
 
 //classe para inserir os dados CommandLineRunner e instanciar os dados apenas quando rodar no banco MySql
 @Configuration
@@ -17,6 +19,8 @@ public class DevConfig {
 
 	@Autowired
 	private DataBaseService dbService;
+	
+	
 
 	@Value("${spring.jpa.hibernate.ddl-auto}")
 	private String strategy;
@@ -31,4 +35,11 @@ public class DevConfig {
 
 		return true;
 	}
+	
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
+	}
+	
+	
 }

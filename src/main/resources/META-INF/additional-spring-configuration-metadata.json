@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "default.senderient",
+    "type": "java.lang.String",
+    "description": "A description for 'default.senderient'"
+  },
+  {
+    "name": "default.sender",
+    "type": "java.lang.String",
+    "description": "A description for 'default.sender'"
+  },
+  {
+    "name": "default.sender",
+    "type": "java.lang.String",
+    "description": "A description for 'default.sender'"
+  }
+]}

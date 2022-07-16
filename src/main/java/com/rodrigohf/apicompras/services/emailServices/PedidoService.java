@@ -1,8 +1,9 @@
-package com.rodrigohf.apicompras.services;
+package com.rodrigohf.apicompras.services.emailServices;
 
 import java.util.Date;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import com.rodrigohf.apicompras.domain.enums.EstadoPagamento;
 import com.rodrigohf.apicompras.repositories.ItemPedidoRepository;
 import com.rodrigohf.apicompras.repositories.PagamentoRepository;
 import com.rodrigohf.apicompras.repositories.PedidoRepository;
+import com.rodrigohf.apicompras.services.BoletoService;
+import com.rodrigohf.apicompras.services.ClienteService;
+import com.rodrigohf.apicompras.services.ProdutoService;
 
 @Service
 public class PedidoService {
@@ -31,6 +35,8 @@ public class PedidoService {
 	private ItemPedidoRepository itemPedidoRepository;
 	@Autowired
 	private BoletoService boletoService;
+	@Autowired
+	private EmailService emailService;
 
 	public Pedido listarPedidoPorId(Long id) {
 		Optional<Pedido> obj = pedRepo.findById(id);
@@ -38,6 +44,7 @@ public class PedidoService {
 				.orElseThrow(()-> new RuntimeException("Objeto ID "+ id + " não Encontrado!!!"));
 	}
 
+	@Transactional
 	public Pedido inserirCategoria(@Valid Pedido pedido) {
 		pedido.setInstante(new Date());
 		pedido.setCliente(clienteService.listarClientePorId(pedido.getCliente().getId()));
@@ -54,11 +61,11 @@ public class PedidoService {
 			ip.setProduto(produtoService.listarProdutoPorId(ip.getProduto().getId()));
 			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(pedido);
+			
 		}
 		itemPedidoRepository.saveAll(pedido.getItens());
+		emailService.emailDeConfirmaçãoDoPedido(pedido);
 		
-		//automaticamente ele mostra o toString de pedido no log do console(usado para configuraçao de serviço de email)
-		System.out.println(pedido);
 		return pedido;
 		
 	}
