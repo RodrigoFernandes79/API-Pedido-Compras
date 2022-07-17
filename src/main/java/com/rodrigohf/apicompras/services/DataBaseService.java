@@ -20,6 +20,7 @@ import com.rodrigohf.apicompras.domain.PagamentoComCartao;
 import com.rodrigohf.apicompras.domain.Pedido;
 import com.rodrigohf.apicompras.domain.Produto;
 import com.rodrigohf.apicompras.domain.enums.EstadoPagamento;
+import com.rodrigohf.apicompras.domain.enums.PerfilClientes;
 import com.rodrigohf.apicompras.domain.enums.TipoCliente;
 import com.rodrigohf.apicompras.repositories.CategoriaRepository;
 import com.rodrigohf.apicompras.repositories.CidadeRepository;
@@ -115,17 +116,24 @@ public class DataBaseService {
 		estRepo.saveAll(Arrays.asList(est1, est2));
 		cidRepo.saveAll(Arrays.asList(c1, c2, c3));
 
-		Cliente cli1 = new Cliente(null, "Maria Silva", "rodrigohf79@hotmail.com.com", "36378912377",
+		Cliente cli1 = new Cliente(null, "Maria Silva", "rodrigohf79@hotmail.com", "36378912377",
 				TipoCliente.PESSOAFISICA,passwordEncoder.encode("batata123"));
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+		
+		Cliente cli2 = new Cliente(null, "Roberto da Silva", "restaurantesabordolar@hotmail.com", "36378912377",
+				TipoCliente.PESSOAJURIDICA,passwordEncoder.encode("12308"));
+		cli2.getTelefones().addAll(Arrays.asList("36634522", "993659998"));
+		cli2.addPerfil(PerfilClientes.ADMIN);
 
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 203", "Jardim", "38220834", cli1, c1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "sala 800", "Centro", "38777012", cli1, c2);
+		Endereco e3 = new Endereco(null, "Rua da Palma", "68", null, "Centro", "6333515", cli2, c3);
 
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
 
-		cliRepo.saveAll(Arrays.asList(cli1));
-		endRepo.saveAll(Arrays.asList(e1, e2));
+		cliRepo.saveAll(Arrays.asList(cli1,cli2));
+		endRepo.saveAll(Arrays.asList(e1, e2,e3));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 

@@ -7,16 +7,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import java.util.stream.Collectors;
+
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rodrigohf.apicompras.domain.enums.PerfilClientes;
 import com.rodrigohf.apicompras.domain.enums.TipoCliente;
 
 @Entity
@@ -32,6 +36,11 @@ public class Cliente implements Serializable{
 	
 	@JsonIgnore
 	private String senha;
+	
+	 @ElementCollection(fetch=FetchType.EAGER)
+	 @CollectionTable(name="PERFIL") // as duas anotações criarão uma tabela auxiliar só com os dados dos perfis do cliente
+		private Set<Integer> perfis = new HashSet<>();
+	 
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
@@ -48,6 +57,7 @@ public class Cliente implements Serializable{
 	private List<Pedido> pedidos = new ArrayList<>();
 
 	public Cliente() {
+		addPerfil(PerfilClientes.CLIENTE);
 		
 	}
 
@@ -59,6 +69,7 @@ public class Cliente implements Serializable{
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = (tipo == null) ? null : tipo.getCod();
 		this.senha = senha;
+		addPerfil(PerfilClientes.CLIENTE);
 	}
 
 	public Long getId() {
@@ -91,7 +102,15 @@ public class Cliente implements Serializable{
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
+	
+	public Set<PerfilClientes> getPerfis(){
+		return perfis.stream().map(x-> PerfilClientes.toEnum(x)).collect(Collectors.toSet());
+		
+	}
+	public void addPerfil(PerfilClientes perfil){
+		perfis.add(perfil.getCod());
+		
+	}
 	public String getCpfOuCnpj() {
 		return cpfOuCnpj;
 	}
