@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ public class CategoriaController {
 		
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')") //somente admins podem acessar
 	@PostMapping
 	public ResponseEntity<Categoria> inserirCategoria(@Valid @RequestBody CategoriaDTO categoriaDTO){
 		Categoria objDTO = catService.fromDTO(categoriaDTO);
@@ -56,6 +58,7 @@ public class CategoriaController {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')") //somente admins podem acessar
 	@PutMapping("/{id}")
 	public ResponseEntity<Categoria> atualizarCategoria(@PathVariable Long id, @Valid @RequestBody CategoriaDTO categoriaDTO){
 		Categoria objDTO = catService.fromDTO(categoriaDTO);
@@ -64,6 +67,7 @@ public class CategoriaController {
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')") //somente admins podem acessar
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void deletarCategoriaPorId(@PathVariable Long id) {

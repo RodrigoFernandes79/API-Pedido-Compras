@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ public class ClienteController {
 		return ResponseEntity.ok().body(obj);
 
 	}
+	
 	@PostMapping
 	public ResponseEntity<Cliente> inserirCliente(@Valid @RequestBody ClienteNewDTO clienteNewDTO){
 		Cliente objDTO = clienteService.fromDTO(clienteNewDTO);
@@ -62,12 +64,14 @@ public class ClienteController {
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')") //somente admins podem acessar
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void deletarClientePorId(@PathVariable Long id) {
 		clienteService.deletarClientePorId(id);
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')") //somente admins podem acessar
 	@GetMapping
 	public ResponseEntity<List<ClienteDTO>> listarCliente(){
 		
@@ -76,6 +80,8 @@ public class ClienteController {
 		
 		return ResponseEntity.ok().body(objListDTO);
 	}
+	
+	@PreAuthorize("hasAnyRole('ADMIN')") //somente admins podem acessar
 	//Paginação com parâmetros opcionais na requisição
 	@GetMapping("/pages")
 	public ResponseEntity<Page<ClienteDTO>> listarPaginacao(
