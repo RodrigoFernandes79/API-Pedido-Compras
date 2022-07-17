@@ -10,7 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.rodrigohf.apicompras.domain.Cidade;
@@ -30,6 +30,9 @@ public class ClienteService {
 	private ClienteRepository clienteRepo;
 	@Autowired
 	private EnderecoRepository enderecoRepo;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 
 	public Cliente listarClientePorId(Long id) {
@@ -103,13 +106,13 @@ public class ClienteService {
 
 	// método auxiliar para instanciar Cliente a partir do objeto ClienteDTO
 	public Cliente fromDTO(ClienteDTO ClienteDTO) {
-		return new Cliente(ClienteDTO.getId(), ClienteDTO.getNome(), ClienteDTO.getEmail(), null, null);
+		return new Cliente(ClienteDTO.getId(), ClienteDTO.getNome(), ClienteDTO.getEmail(), null, null,null);
 	}
 
 	//Método auxiliar  para instanciar Cliente a partir dos dados do objeto ClienteNewDto(usar para criar novo cliente)
 	public Cliente fromDTO(ClienteNewDTO clienteNewDTO) {
 		Cliente cli = new Cliente(null, clienteNewDTO.getNome(), clienteNewDTO.getEmail(),clienteNewDTO.getCpfOuCnpj(),
-				TipoCliente.toEnum(clienteNewDTO.getTipo()));
+				TipoCliente.toEnum(clienteNewDTO.getTipo()), passwordEncoder.encode(clienteNewDTO.getSenha()));
 		
 		Cidade cid = new Cidade(clienteNewDTO.getCidadeId(),null,null);
 		
