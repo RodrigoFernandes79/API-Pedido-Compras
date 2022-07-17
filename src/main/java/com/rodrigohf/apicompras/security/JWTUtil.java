@@ -19,11 +19,11 @@ public class JWTUtil {
 	private Long expiration;
 	
 	//metodo para gerar o token
-	public String StringGenerateToken(String email) {
+	public String StringGenerateToken(String username) {
 		
 		
 		return Jwts.builder()
-				.setSubject(email)
+				.setSubject(username)
 				.setExpiration(new Date(System.currentTimeMillis() + expiration))
 				.signWith(SignatureAlgorithm.HS512, secret.getBytes())
 				.compact();

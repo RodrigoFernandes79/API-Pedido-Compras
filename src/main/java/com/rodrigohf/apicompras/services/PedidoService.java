@@ -1,4 +1,4 @@
-package com.rodrigohf.apicompras.services.emailServices;
+package com.rodrigohf.apicompras.services;
 
 import java.util.Date;
 import java.util.Optional;
@@ -16,9 +16,7 @@ import com.rodrigohf.apicompras.domain.enums.EstadoPagamento;
 import com.rodrigohf.apicompras.repositories.ItemPedidoRepository;
 import com.rodrigohf.apicompras.repositories.PagamentoRepository;
 import com.rodrigohf.apicompras.repositories.PedidoRepository;
-import com.rodrigohf.apicompras.services.BoletoService;
-import com.rodrigohf.apicompras.services.ClienteService;
-import com.rodrigohf.apicompras.services.ProdutoService;
+import com.rodrigohf.apicompras.services.emailServices.EmailService;
 
 @Service
 public class PedidoService {
