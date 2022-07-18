@@ -7,8 +7,13 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Service;
 
+import com.rodrigohf.apicompras.domain.Cliente;
 import com.rodrigohf.apicompras.domain.ItemPedido;
 import com.rodrigohf.apicompras.domain.PagamentoComBoleto;
 import com.rodrigohf.apicompras.domain.Pedido;
@@ -16,18 +21,19 @@ import com.rodrigohf.apicompras.domain.enums.EstadoPagamento;
 import com.rodrigohf.apicompras.repositories.ItemPedidoRepository;
 import com.rodrigohf.apicompras.repositories.PagamentoRepository;
 import com.rodrigohf.apicompras.repositories.PedidoRepository;
+import com.rodrigohf.apicompras.security.UserSpringSecurity;
 import com.rodrigohf.apicompras.services.emailServices.EmailService;
 
 @Service
 public class PedidoService {
-	
+
 	@Autowired
 	private PedidoRepository pedRepo;
-	@Autowired 
+	@Autowired
 	private ClienteService clienteService;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
-	@Autowired 
+	@Autowired
 	private ProdutoService produtoService;
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
@@ -38,17 +44,16 @@ public class PedidoService {
 
 	public Pedido listarPedidoPorId(Long id) {
 		Optional<Pedido> obj = pedRepo.findById(id);
-		return obj
-				.orElseThrow(()-> new RuntimeException("Objeto ID "+ id + " não Encontrado!!!"));
+		return obj.orElseThrow(() -> new RuntimeException("Objeto ID " + id + " não Encontrado!!!"));
 	}
 
 	@Transactional
-	public Pedido inserirCategoria(@Valid Pedido pedido)  {
+	public Pedido inserirCategoria(@Valid Pedido pedido) {
 		pedido.setInstante(new Date());
 		pedido.setCliente(clienteService.listarClientePorId(pedido.getCliente().getId()));
 		pedido.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		pedido.getPagamento().setPedido(pedido);
-		if(pedido.getPagamento() instanceof PagamentoComBoleto) {
+		if (pedido.getPagamento() instanceof PagamentoComBoleto) {
 			PagamentoComBoleto pagto = (PagamentoComBoleto) pedido.getPagamento();
 			boletoService.preencherPagamentoComBoleto(pagto, pedido.getInstante());
 		}
@@ -59,13 +64,23 @@ public class PedidoService {
 			ip.setProduto(produtoService.listarProdutoPorId(ip.getProduto().getId()));
 			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(pedido);
-			
+
 		}
 		itemPedidoRepository.saveAll(pedido.getItens());
 		emailService.emailDeConfirmaçãoDoPedido(pedido);
-		
+
 		return pedido;
-		
+
 	}
 
+	public Page<Pedido> listarPaginacao(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSpringSecurity user = UserService.authenticated();
+		if (user == null) {
+			throw new AuthenticationServiceException("Acesso negado");
+		}
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Cliente cliente = clienteService.listarClientePorId(user.getId());
+		return pedRepo.findByCliente(cliente, pageRequest);
+
+	}
 }
