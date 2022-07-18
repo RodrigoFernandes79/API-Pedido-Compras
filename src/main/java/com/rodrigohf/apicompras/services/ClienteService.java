@@ -10,17 +10,21 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rodrigohf.apicompras.domain.Cidade;
 import com.rodrigohf.apicompras.domain.Cliente;
 import com.rodrigohf.apicompras.domain.Endereco;
+import com.rodrigohf.apicompras.domain.enums.PerfilClientes;
 import com.rodrigohf.apicompras.domain.enums.TipoCliente;
 import com.rodrigohf.apicompras.dtos.ClienteDTO;
 import com.rodrigohf.apicompras.dtos.ClienteNewDTO;
 import com.rodrigohf.apicompras.repositories.ClienteRepository;
 import com.rodrigohf.apicompras.repositories.EnderecoRepository;
+import com.rodrigohf.apicompras.security.UserSpringSecurity;
 
 
 @Service
@@ -36,14 +40,22 @@ public class ClienteService {
 	
 
 	public Cliente listarClientePorId(Long id) {
+		
+		//(Spring Security)Negando acesso para usuario acessar esse endpoint baseado nas seguintes condições:
+				UserSpringSecurity user = UserService.authenticated();
+				if (user==null || !user.hasRole(PerfilClientes.ADMIN) && !id.equals(user.getId())) {
+					throw new InternalAuthenticationServiceException("Acesso Negado");
+				}
+		
 		Optional<Cliente> obj = clienteRepo.findById(id);
 		return obj
 				.orElseThrow(()-> new RuntimeException("Objeto ID "+ id + " não Encontrado!!!"));
 	}
 	
-	public Cliente inserirCliente(Cliente Cliente) {
-
-		Cliente obj = clienteRepo.save(Cliente);
+	@Transactional
+	public Cliente inserirCliente(Cliente cliente) {
+		cliente.setId(null);
+		Cliente obj = clienteRepo.save(cliente);
 		enderecoRepo.saveAll(obj.getEnderecos());
 
 		return obj;

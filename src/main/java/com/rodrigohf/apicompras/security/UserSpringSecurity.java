@@ -83,4 +83,16 @@ public class UserSpringSecurity implements UserDetails{
 		return true;
 	}
 
+//(Spring Security)método para saber se o Usuário tem perfil de admin:
+	public boolean hasRole(PerfilClientes admin) {
+		
+		return getAuthorities().contains(new SimpleGrantedAuthority(admin.getDescricao()));
+	}
+
+
+	
+
+
+	
+
 }

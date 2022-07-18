@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -63,5 +64,16 @@ public class ExceptionsControllerAdvice {
 		
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(obj);
+}
+	//Tratamento de exceção personalizada de não autorização de usuario(spring Security)
+	@ExceptionHandler(InternalAuthenticationServiceException.class)
+	public ResponseEntity<ApiException> authorization(InternalAuthenticationServiceException ex , HttpServletRequest request){
+		
+		ApiException obj = new ApiException(LocalDateTime.now(),
+				ex.getMessage(),
+				HttpStatus.FORBIDDEN.value(),
+				request.getRequestURI());
+		
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(obj);
 }
 }

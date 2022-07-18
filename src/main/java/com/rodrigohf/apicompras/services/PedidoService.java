@@ -43,7 +43,7 @@ public class PedidoService {
 	}
 
 	@Transactional
-	public Pedido inserirCategoria(@Valid Pedido pedido) {
+	public Pedido inserirCategoria(@Valid Pedido pedido)  {
 		pedido.setInstante(new Date());
 		pedido.setCliente(clienteService.listarClientePorId(pedido.getCliente().getId()));
 		pedido.getPagamento().setEstado(EstadoPagamento.PENDENTE);

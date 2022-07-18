@@ -35,7 +35,7 @@ public class ClienteController {
 	private ClienteService clienteService;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Cliente> listarClientePorId(@PathVariable Long id) {
+	public ResponseEntity<Cliente> listarClientePorId(@PathVariable Long id)  {
 
 		Cliente obj = clienteService.listarClientePorId(id);
 

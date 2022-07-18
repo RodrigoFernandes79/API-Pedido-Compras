@@ -35,7 +35,7 @@ public class PedidoController {
 		
 	}
 	@PostMapping
-	public ResponseEntity<Pedido> inserirCategoria(@Valid @RequestBody Pedido pedido){
+	public ResponseEntity<Pedido> inserirCategoria(@Valid @RequestBody Pedido pedido) {
 		
 		Pedido obj = pedidoService.inserirCategoria(pedido);
 		

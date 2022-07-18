@@ -43,17 +43,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				"/categorias/**"
 		};
 		
-public static final String[] PUBLIC_MATCHERS_POST = {
+		public static final String[] PUBLIC_MATCHERS_POST = {
 				
 				"/clientes/**"
 		};
 
 		@Override
-		protected void configure(HttpSecurity http) throws Exception {
+		protected void configure(HttpSecurity http) throws Exception  {
 			
 			http.authorizeRequests()
 			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll() //permitindo somente acesso ao metodo get no endpoint
-			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_POST).permitAll() //somente clientes podem cadastrar no endpoint
+			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll() //somente clientes podem cadastrar no endpoint
 			.anyRequest().authenticated()
 			.and().httpBasic()
 	    	.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
