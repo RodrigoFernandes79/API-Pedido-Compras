@@ -42,6 +42,8 @@ public class ClienteService {
 	@Autowired
 	private S3Service s3Service;
 	
+	
+	
 
 	public Cliente listarClientePorId(Long id) {
 		
@@ -149,9 +151,19 @@ public class ClienteService {
 	
 	//enviando foto de perfil do cliente:
 	public URI imagemDePerfilUpload(MultipartFile multipartFile) {
+		UserSpringSecurity user = UserService.authenticated();
+		if (user==null) {
+			throw new InternalAuthenticationServiceException("Acesso Negado");
+		}
 		
+		URI uri = s3Service.uploadFile(multipartFile);
 		
-		return s3Service.uploadFile(multipartFile);
+		Cliente cli = listarClientePorId(user.getId());
+		cli.setImageUrl(uri.toString());
+		
+		clienteRepo.save(cli);
+		
+		return uri;
 		
 	}
 	

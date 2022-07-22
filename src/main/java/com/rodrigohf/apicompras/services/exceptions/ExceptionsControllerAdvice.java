@@ -2,8 +2,6 @@ package com.rodrigohf.apicompras.services.exceptions;
 
 
 
-import java.io.FileNotFoundException;
-import java.nio.file.FileSystemNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +16,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 
 @RestControllerAdvice
 public class ExceptionsControllerAdvice {
@@ -81,49 +75,5 @@ public class ExceptionsControllerAdvice {
 				request.getRequestURI());
 		
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(obj);
-}  //exceção personalizada de envio de imagens para o s3Bucket AmazonAWS
-	@ExceptionHandler(FileSystemNotFoundException.class)
-	public ResponseEntity<ApiException> file(FileNotFoundException ex , HttpServletRequest request){
-		
-		ApiException obj = new ApiException(LocalDateTime.now(),
-				ex.getMessage(),
-				HttpStatus.BAD_REQUEST.value(),
-				request.getRequestURI());
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(obj);
 }
-	//exceção personalizada para o AmazonAWS
-		@ExceptionHandler(AmazonServiceException.class)
-		public ResponseEntity<ApiException> amazonService(AmazonServiceException ex , HttpServletRequest request){
-			
-			HttpStatus code = HttpStatus.valueOf(ex.getErrorCode());
-			ApiException obj = new ApiException(LocalDateTime.now(),
-					ex.getMessage(),
-					code.value(),
-					request.getRequestURI());
-			
-			return ResponseEntity.status(code.value()).body(obj);
-	}
-		@ExceptionHandler(AmazonClientException.class)
-		public ResponseEntity<ApiException> amazonClient(AmazonClientException ex , HttpServletRequest request){
-			
-			
-			ApiException obj = new ApiException(LocalDateTime.now(),
-					ex.getMessage(),
-					HttpStatus.BAD_REQUEST.value(),
-					request.getRequestURI());
-			
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(obj);
-	}
-		@ExceptionHandler(AmazonS3Exception.class)
-		public ResponseEntity<ApiException> amazonS3(AmazonS3Exception ex , HttpServletRequest request){
-			
-			
-			ApiException obj = new ApiException(LocalDateTime.now(),
-					ex.getMessage(),
-					HttpStatus.BAD_REQUEST.value(),
-					request.getRequestURI());
-			
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(obj);
-	}
 }

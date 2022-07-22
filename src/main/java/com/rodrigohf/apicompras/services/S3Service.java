@@ -1,11 +1,9 @@
 package com.rodrigohf.apicompras.services;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.FileSystemNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +37,7 @@ public class S3Service {
 		
 		} catch (IOException e) {
 			
-			throw new FileSystemNotFoundException("Erro de IO "+e.getMessage());
+			throw new RuntimeException("Erro de IO "+e.getMessage());
 		}
 		
 
@@ -56,7 +54,7 @@ public class S3Service {
 			return s3Client.getUrl(bucketName, fileName).toURI();
 		} catch (URISyntaxException e) {
 			
-			throw new FileSystemNotFoundException("Erro ao converter URL para URI");
+			throw new RuntimeException("Erro ao converter URL para URI");
 	}
 
 	}
