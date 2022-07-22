@@ -1,6 +1,7 @@
 package com.rodrigohf.apicompras.services;
 
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rodrigohf.apicompras.domain.Cidade;
 import com.rodrigohf.apicompras.domain.Cliente;
@@ -37,6 +39,8 @@ public class ClienteService {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	@Autowired
+	private S3Service s3Service;
 	
 
 	public Cliente listarClientePorId(Long id) {
@@ -141,6 +145,14 @@ public class ClienteService {
 			cli.getTelefones().add(clienteNewDTO.getTelefone3());
 		}
 		return cli;
+	}
+	
+	//enviando foto de perfil do cliente:
+	public URI imagemDePerfilUpload(MultipartFile multipartFile) {
+		
+		
+		return s3Service.uploadFile(multipartFile);
+		
 	}
 	
 	}
