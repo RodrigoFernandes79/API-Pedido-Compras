@@ -31,6 +31,8 @@ public class AuthController {
 		UserSpringSecurity user = UserService.authenticated();
 		String token = jwtUtil.StringGenerateToken(user.getUsername());
 		response.addHeader("Authorization", "Bearer " + token);
+		response.addHeader("access-control-expose-headers", "Authorization");//resposta de autorização valida 
+        //pra outras requisiçoes Http de apis(frontend)
 		return ResponseEntity.noContent().build();
 	}
 
