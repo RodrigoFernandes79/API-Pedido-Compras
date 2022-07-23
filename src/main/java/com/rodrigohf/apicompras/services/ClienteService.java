@@ -48,6 +48,8 @@ public class ClienteService {
 	private ImageService imageService;
 	@Value("${img.prefix.client.profile}")
 	private String prefix;
+	@Value("${img.profile.size}")
+	private Integer sizeImg;
 	
 	
 
@@ -163,6 +165,11 @@ public class ClienteService {
 		}
 		
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		//recortando e redimensionando a imagem:
+		jpgImage = imageService.cropSquare(jpgImage);
+		jpgImage = imageService.resize(jpgImage,sizeImg);
+		
+		//gerando o nome do arquivo jpg:
 		String fileName = prefix +user.getId()+".jpg";
 		
 		return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
