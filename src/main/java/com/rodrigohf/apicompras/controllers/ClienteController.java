@@ -1,5 +1,6 @@
 package com.rodrigohf.apicompras.controllers;
 
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.List;
 
@@ -98,7 +99,7 @@ public class ClienteController {
 }
 	//criando um endpoint para enviar a foto de perfil do cliente:
 	@PostMapping("/picture")
-	public ResponseEntity<Cliente> imagemDePerfilUpload(@RequestParam(name="file") MultipartFile file){
+	public ResponseEntity<Cliente> imagemDePerfilUpload(@RequestParam(name="file") MultipartFile file) throws FileNotFoundException{
 		
 		URI uri = clienteService.imagemDePerfilUpload(file);
 				

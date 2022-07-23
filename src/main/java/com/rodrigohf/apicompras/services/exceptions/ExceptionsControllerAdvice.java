@@ -2,6 +2,7 @@ package com.rodrigohf.apicompras.services.exceptions;
 
 
 
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,4 +77,15 @@ public class ExceptionsControllerAdvice {
 		
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(obj);
 }
+	//Tratamento de exceção personalizada quando não encontrar imagens jpg ou png
+		@ExceptionHandler(FileNotFoundException.class)
+		public ResponseEntity<ApiException> authorization(FileNotFoundException ex , HttpServletRequest request){
+			
+			ApiException obj = new ApiException(LocalDateTime.now(),
+					ex.getMessage(),
+					HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					request.getRequestURI());
+			
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(obj);
+	}
 }
