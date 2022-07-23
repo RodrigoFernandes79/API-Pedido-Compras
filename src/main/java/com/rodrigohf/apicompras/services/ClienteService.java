@@ -115,6 +115,19 @@ public class ClienteService {
 		return objListDTO;
 
 	}
+	
+	public Cliente listarClientePorEmail(String email) {
+		//(Spring Security)Negando acesso para usuario acessar esse endpoint baseado nas seguintes condições:
+		UserSpringSecurity user = UserService.authenticated();
+		if (user==null || !user.hasRole(PerfilClientes.ADMIN) && !email.equals(user.getUsername())) {
+			throw new InternalAuthenticationServiceException("Acesso Negado");
+		}
+		Cliente find = clienteRepo.findByEmail(email);
+		if(find == null) {    //se o email do cliente nao existe no banco de dados:
+			throw new DataIntegrityViolationException("Email " +user.getUsername()+" não existe no Banco de dados");
+		}
+		return find;
+	}
 
 	// Paginação com parâmetros opcionais na requisição(page= n° de paginas,
 	// linesPerPage= qtdade de linhas por cada pág,

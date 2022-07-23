@@ -82,6 +82,14 @@ public class ClienteController {
 		
 		return ResponseEntity.ok().body(objListDTO);
 	}
+	//encontrar por email recebendo o email como parametro:
+	@GetMapping("/email")
+	public ResponseEntity<Cliente> listarClientePorEmail(@RequestParam(value="email") String email){
+		Cliente obj = clienteService.listarClientePorEmail(email);
+		
+		return ResponseEntity.ok().body(obj);
+		
+	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN')") //somente admins podem acessar
 	//Paginação com parâmetros opcionais na requisição
