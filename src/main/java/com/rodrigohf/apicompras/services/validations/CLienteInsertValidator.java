@@ -1,6 +1,5 @@
 package com.rodrigohf.apicompras.services.validations;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +18,10 @@ import com.rodrigohf.apicompras.services.validations.utils.BR;
 
 //classe que cria o validator personalizado para CPF ou CNPJ de ClienteNewDTO
 public class CLienteInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
-	
+
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
+
 	@Override
 	public void initialize(ClienteInsert ann) {
 	}
@@ -32,30 +31,33 @@ public class CLienteInsertValidator implements ConstraintValidator<ClienteInsert
 		List<ApiException> list = new ArrayList<>();
 
 		// inclua os testes aqui, inserindo erros na lista
-		
-		//se o tipo do objDto for igual ao codigo de pessoa fisica ,e o cpf  do objDto(ClienteNewDTO) não for válido:
-		if(objDto.getTipo().equals(TipoCliente.PESSOAFISICA.getCod()) && !BR.isValidCPF(objDto.getCpfOuCnpj())) {
-			
-			list.add(new ApiException(LocalDateTime.now(), "Campo CPF inválido!", HttpStatus.BAD_REQUEST.value(), null));
+
+		// se o tipo do objDto for igual ao codigo de pessoa fisica ,e o cpf do
+		// objDto(ClienteNewDTO) não for válido:
+		if (objDto.getTipo().equals(TipoCliente.PESSOAFISICA.getCod()) && !BR.isValidCPF(objDto.getCpfOuCnpj())) {
+
+			list.add(new ApiException(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Campo CPF inválido!",
+					null, null));
 		}
-		
-		//se o tipo do objDto for igual ao codigo de pessoa jurídica ,e o cnpj  do objDto(ClienteNewDTO) não for válido:
-		if(objDto.getTipo().equals(TipoCliente.PESSOAJURIDICA.getCod()) && !BR.isValidCNPJ(objDto.getCpfOuCnpj())) {
-			
-			list.add(new ApiException(LocalDateTime.now(),"Campo CNPJ inválido!", HttpStatus.BAD_REQUEST.value(), null));
+
+		// se o tipo do objDto for igual ao codigo de pessoa jurídica ,e o cnpj do
+		// objDto(ClienteNewDTO) não for válido:
+		if (objDto.getTipo().equals(TipoCliente.PESSOAJURIDICA.getCod()) && !BR.isValidCNPJ(objDto.getCpfOuCnpj())) {
+
+			list.add(new ApiException(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+					"Campo CNPJ inválido!", null, null));
 		}
-		
-		//Validar se já existe email no Banco de dados:
+
+		// Validar se já existe email no Banco de dados:
 		Cliente find = clienteRepository.findByEmail(objDto.getEmail());
-		if(find != null) {    //se o email já existe no BD:
-			list.add(new ApiException(LocalDateTime.now(),"Email " + objDto.getEmail()+" já existe", HttpStatus.BAD_REQUEST.value(), null));
+		if (find != null) { // se o email já existe no BD:
+			list.add(new ApiException(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+					"Email " + objDto.getEmail() + " já existe", null, null));
 		}
-			
-		
+
 		for (ApiException e : list) {
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(e.getMensagem())
-					.addConstraintViolation();
+			context.buildConstraintViolationWithTemplate(e.getMensagem()).addConstraintViolation();
 		}
 		return list.isEmpty();
 	}

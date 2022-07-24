@@ -1,31 +1,27 @@
 package com.rodrigohf.apicompras.services.exceptions;
 
-import java.time.LocalDateTime;
-
-
-
-
 public class ApiException {
 
-	private LocalDateTime localDate;
-	private String mensagem;
+	private Long localDate;
 	private Integer status;
+	private String erro;
+	private String mensagem;
 	private String path;
 	
 	
-	
 
-	public ApiException(LocalDateTime localDate, String mensagem, Integer status, String path) {
+	public ApiException(Long localDateTime, Integer status, String erro, String mensagem, String path) {
 		super();
-		this.localDate = localDate;
-		this.mensagem = mensagem;
+		this.localDate = localDateTime;
 		this.status = status;
+		this.erro = erro;
+		this.mensagem = mensagem;
 		this.path = path;
 	}
 
+	
 
-
-	public LocalDateTime getLocalDate() {
+	public Long getLocalDate() {
 		return localDate;
 	}
 
@@ -37,10 +33,21 @@ public class ApiException {
 	public Integer getStatus() {
 		return status;
 	}
+	
+	public String getErro() {
+		return erro;
+	}
+
+	public void setErro(String erro) {
+		this.erro = erro;
+	}
+	
 
 	public String getPath() {
 		return path;
 	}
+
+	
 	
 	
 }

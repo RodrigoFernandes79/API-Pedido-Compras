@@ -3,7 +3,6 @@ package com.rodrigohf.apicompras.services.exceptions;
 
 
 import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +24,11 @@ public class ExceptionsControllerAdvice {
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ApiException> validationNotfoundException(RuntimeException ex , HttpServletRequest request){
 		
-		ApiException obj = new ApiException(LocalDateTime.now(),
-				ex.getMessage(),
+		ApiException obj = new ApiException(System.currentTimeMillis(),
 				HttpStatus.NOT_FOUND.value(),
+				"Não Encontrado",
+				ex.getMessage(),
+				
 				request.getRequestURI());
 		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(obj);
@@ -37,15 +38,16 @@ public class ExceptionsControllerAdvice {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<ApiException> dataIntegrity(DataIntegrityViolationException ex , HttpServletRequest request){
 		
-		ApiException obj = new ApiException(LocalDateTime.now(),
-				ex.getMessage(),
+		ApiException obj = new ApiException(System.currentTimeMillis(),
 				HttpStatus.BAD_REQUEST.value(),
+				"Integridade de Dados",
+				ex.getMessage(),
 				request.getRequestURI());
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(obj);
 }
 	//Tratamento da Exceçao Validation
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ApiException> argumentValid(MethodArgumentNotValidException ex,HttpServletRequest request){
 		List<String> erro =new ArrayList<>();
@@ -57,35 +59,38 @@ public class ExceptionsControllerAdvice {
 		});
 			
 		
-		ApiException obj = new ApiException(LocalDateTime.now(),
-				erro.toString(),
-				HttpStatus.BAD_REQUEST.value(),
+		ApiException obj = new ApiException(System.currentTimeMillis(),
+				HttpStatus.UNPROCESSABLE_ENTITY.value(),
+				"Erro de Validação",
+				ex.getMessage(),
 				request.getRequestURI());
 		
 		
 		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(obj);
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(obj);
 }
 	//Tratamento de exceção personalizada de não autorização de usuario(spring Security)
 	@ExceptionHandler(InternalAuthenticationServiceException.class)
 	public ResponseEntity<ApiException> authorization(InternalAuthenticationServiceException ex , HttpServletRequest request){
 		
-		ApiException obj = new ApiException(LocalDateTime.now(),
-				ex.getMessage(),
+		ApiException obj =new ApiException(System.currentTimeMillis(),
 				HttpStatus.FORBIDDEN.value(),
+				"Acesso Negado!",
+				ex.getMessage(),
 				request.getRequestURI());
 		
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(obj);
 }
 	//Tratamento de exceção personalizada quando não encontrar imagens jpg ou png
 		@ExceptionHandler(FileNotFoundException.class)
-		public ResponseEntity<ApiException> authorization(FileNotFoundException ex , HttpServletRequest request){
+		public ResponseEntity<ApiException> file(FileNotFoundException ex , HttpServletRequest request){
 			
-			ApiException obj = new ApiException(LocalDateTime.now(),
+			ApiException obj = new ApiException(System.currentTimeMillis(),
+					HttpStatus.BAD_REQUEST.value(),
+					"Erro de Arquivo",
 					ex.getMessage(),
-					HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					request.getRequestURI());
 			
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(obj);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(obj);
 	}
 }
