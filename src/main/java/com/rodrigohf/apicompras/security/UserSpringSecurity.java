@@ -36,7 +36,6 @@ public class UserSpringSecurity implements UserDetails{
 	}
 
 
-
 	public Long getId() {
 		return id;
 	}
