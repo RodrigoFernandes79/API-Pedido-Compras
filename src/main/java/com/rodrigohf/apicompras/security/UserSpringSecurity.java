@@ -35,9 +35,13 @@ public class UserSpringSecurity implements UserDetails{
 		this.autorizacoes = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toList());
 	}
 
-
 	public Long getId() {
 		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Override
@@ -87,6 +91,9 @@ public class UserSpringSecurity implements UserDetails{
 		
 		return getAuthorities().contains(new SimpleGrantedAuthority(admin.getDescricao()));
 	}
+
+
+	
 
 
 	

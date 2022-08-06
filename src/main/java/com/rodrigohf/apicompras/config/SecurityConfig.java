@@ -23,6 +23,7 @@ import com.rodrigohf.apicompras.security.JWTUtil;
 
 
 
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity  // configurando a anotação @PreAuthorize para permitir acesso somente para admins
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -50,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				"/auth/forgot/**"
 		};
 
+		@SuppressWarnings("deprecation")
 		@Override
 		protected void configure(HttpSecurity http) throws Exception  {
 			
