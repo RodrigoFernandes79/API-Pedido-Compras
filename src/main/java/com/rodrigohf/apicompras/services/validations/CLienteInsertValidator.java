@@ -36,8 +36,7 @@ public class CLienteInsertValidator implements ConstraintValidator<ClienteInsert
 		// objDto(ClienteNewDTO) não for válido:
 		if (objDto.getTipo().equals(TipoCliente.PESSOAFISICA.getCod()) && !BR.isValidCPF(objDto.getCpfOuCnpj())) {
 
-			list.add(new ApiException(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Campo CPF inválido!",
-					null, null));
+			list.add(new ApiException(null, null, null,"CPF INVÁLIDO", null));
 		}
 
 		// se o tipo do objDto for igual ao codigo de pessoa jurídica ,e o cnpj do
@@ -45,14 +44,14 @@ public class CLienteInsertValidator implements ConstraintValidator<ClienteInsert
 		if (objDto.getTipo().equals(TipoCliente.PESSOAJURIDICA.getCod()) && !BR.isValidCNPJ(objDto.getCpfOuCnpj())) {
 
 			list.add(new ApiException(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
-					"Campo CNPJ inválido!", null, null));
+					"cpfOuCnpj","Campo CNPJ inválido!", null));
 		}
 
 		// Validar se já existe email no Banco de dados:
 		Cliente find = clienteRepository.findByEmail(objDto.getEmail());
 		if (find != null) { // se o email já existe no BD:
 			list.add(new ApiException(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
-					"Email " + objDto.getEmail() + " já existe", null, null));
+					"email","Email já cadastrado", null));
 		}
 
 		for (ApiException e : list) {

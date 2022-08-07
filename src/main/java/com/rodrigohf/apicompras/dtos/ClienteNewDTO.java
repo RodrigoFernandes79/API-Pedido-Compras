@@ -29,7 +29,10 @@ public class ClienteNewDTO implements Serializable{
 	
 
 	@NotEmpty(message="Preenchimento obrigatório!")
+	@Length(min=11, max=14, message="O campo deve ser preenchido entre 11 e 14 caracteres!")
 	private String cpfOuCnpj;
+	
+	
 	private Integer tipo;
 	
 	@NotEmpty(message="Preenchimento obrigatório!")

@@ -30,6 +30,7 @@ import com.rodrigohf.apicompras.dtos.ClienteNewDTO;
 import com.rodrigohf.apicompras.repositories.ClienteRepository;
 import com.rodrigohf.apicompras.repositories.EnderecoRepository;
 import com.rodrigohf.apicompras.security.UserSpringSecurity;
+import com.rodrigohf.apicompras.services.exceptions.DataIntegrityException;
 
 
 @Service
@@ -67,20 +68,27 @@ public class ClienteService {
 	}
 	
 	@Transactional
-	public Cliente inserirCliente(Cliente cliente) {
+	public Cliente inserirCliente(Cliente cliente){
+		Cliente cpfOuCnpj = clienteRepo.findByCpfOuCnpj(cliente.getCpfOuCnpj());
+		if(cpfOuCnpj!=null) {
+			throw new DataIntegrityException("cpfOuCNPJ  já existe");	
+		}
+		
 		cliente.setId(null);
 		Cliente obj = clienteRepo.save(cliente);
 		enderecoRepo.saveAll(obj.getEnderecos());
 
 		return obj;
+		
 	}
 
+	
 	public Cliente atualizarCliente(Long id, Cliente cliente) {
 		
 		
 		Cliente find = clienteRepo.findByEmail(cliente.getEmail());
 		if(find != null && find.getId()!= id) {    //se o email de outro cliente já existe no BD :
-			throw new DataIntegrityViolationException("Email " +cliente.getEmail()+" já existe no Banco de dados");
+			throw new DataIntegrityException("Email " +cliente.getEmail()+" já existe no Banco de dados");
 		}
 		return clienteRepo.findById(id).map(obj -> {
 			obj.getId();

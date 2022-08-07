@@ -206,7 +206,7 @@ public class DataBaseService {
 		estRepo.saveAll(Arrays.asList(est1, est2));
 		cidRepo.saveAll(Arrays.asList(c1, c2, c3));
 
-		Cliente cli1 = new Cliente(null, "Maria Silva", "rodrigohf79@hotmail.com", "36378912377",
+		Cliente cli1 = new Cliente(null, "Maria Silva", "rodrigohf79@hotmail.com", "02704479461",
 				TipoCliente.PESSOAFISICA,passwordEncoder.encode("batata123"));
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
 		
