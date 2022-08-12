@@ -1,7 +1,6 @@
 package com.rodrigohf.apicompras.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,21 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository catRepo;
 
-	public Categoria listarCategoriaPorId(Long id) {
-		Optional<Categoria> obj = catRepo.findById(id);
-		return obj.orElseThrow(() -> new RuntimeException("Objeto ID " + id + " não Encontrado!!!"));
+	public Page<Categoria> listarCategoriaPorId(Long id, Integer page, Integer linesPerPage, String orderBy, String direction) {
+		Categoria categoria = catRepo.findById(id)
+				.orElseThrow(() -> new RuntimeException("Objeto ID " + id + " não Encontrado!!!"));
+
+				
+				
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		
+			 
+			Page<Categoria>  cat = catRepo.findById(categoria.getId(), pageRequest);
+				
+			return cat;
+		
+		
+		  
 	}
 
 	public Categoria inserirCategoria( Categoria categoria) {

@@ -21,6 +21,8 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoService produtoService;
 	
+	
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Produto> listarProdutoPorId(@PathVariable Long id){
 		
@@ -30,17 +32,19 @@ public class ProdutoController {
 		
 	}
 	
-	@GetMapping //localhost/8080/produtos/?nome="nome"
-	public ResponseEntity<Page<Produto>> listarProdutoPorDescricaoPaginacao(
+	@GetMapping("/nomes") //localhost/8080/produtos/?nome="nome"
+	public ResponseEntity<Page<Produto>> listarProdutoPorNomePaginacao(
 			@RequestParam(value="nome",required=false) String nome,
 			@RequestParam(value="page",defaultValue = "0") Integer page,
 			@RequestParam(value="linesPerPage",defaultValue = "24") Integer linesPerPage,
 			@RequestParam(value="orderBy",defaultValue = "nome") String orderBy,
 			@RequestParam(value="direction",defaultValue = "ASC") String direction){
 		
-		Page<Produto> objList = produtoService.listarProdutoPorDescricaoPaginacao(nome, page, linesPerPage, orderBy, direction);
+		Page<Produto> objList = produtoService.listarProdutoPorNomePaginacao(nome, page, linesPerPage, orderBy, direction);
 		
 		
 		return ResponseEntity.ok().body(objList);
 }
+	
+	
 }

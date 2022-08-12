@@ -17,6 +17,11 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>{
 	
 	@Transactional(readOnly=true)
 	@Query(value="SELECT * FROM PRODUTO  WHERE NOME LIKE %:nome%" , nativeQuery = true) //ilike ignora case sensitive
-	Page<Produto> listarProdutoPorDescricao(@Param(value="nome")String nome, PageRequest pageRequest);
-
+	Page<Produto> listarProdutoPorNome(@Param(value="nome")String nome, PageRequest pageRequest);
+	
+	
 }
+
+
+
+

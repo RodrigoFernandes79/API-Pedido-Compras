@@ -23,14 +23,16 @@ public class ProdutoService {
 				.orElseThrow(()-> new RuntimeException("Objeto ID "+ id + " não Encontrado!!!"));
 	}
 	
-	public Page<Produto> listarProdutoPorDescricaoPaginacao(String nome,Integer page, Integer linesPerPage, String orderBy, String direction) {
+	public Page<Produto> listarProdutoPorNomePaginacao(String nome,Integer page, Integer linesPerPage, String orderBy, String direction) {
 
 		PageRequest pageRequest = PageRequest.of( page, linesPerPage, Direction.valueOf(direction), orderBy);
 
-		Page<Produto> objList = produtoRepo.listarProdutoPorDescricao(nome, pageRequest);
+		Page<Produto> objList = produtoRepo.listarProdutoPorNome(nome, pageRequest);
 		
 
 		return objList;
 	}
+	
+	
 
 }

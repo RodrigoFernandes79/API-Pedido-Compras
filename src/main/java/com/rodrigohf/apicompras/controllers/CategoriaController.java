@@ -35,10 +35,13 @@ public class CategoriaController {
 	@Autowired
 	private CategoriaService catService;
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<Categoria> listarCategoriaPorId(@PathVariable Long id){
+	@GetMapping("/pages/{id}")
+	public ResponseEntity<Page<Categoria>> listarCategoriaPorId(@PathVariable Long id,@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "DESC") String direction){
 		
-		Categoria obj = catService.listarCategoriaPorId(id);
+		Page<Categoria> obj = catService.listarCategoriaPorId(id,page,linesPerPage,orderBy,direction);
 		
 		return ResponseEntity.ok().body(obj);
 		
