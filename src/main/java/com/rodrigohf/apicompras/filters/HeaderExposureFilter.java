@@ -21,7 +21,7 @@ public class HeaderExposureFilter implements Filter {
 			throws IOException, ServletException {
 
 		HttpServletResponse res = (HttpServletResponse) response;
-		res.addHeader("access-control-expose-headers", "Location");// resposta do location put e post validas
+		res.addHeader("access-control-expose-headers", "location");// resposta do location put e post validas
 		// pra outras requisiçoes Http de apis(frontend)
 		chain.doFilter(request, response);
 
