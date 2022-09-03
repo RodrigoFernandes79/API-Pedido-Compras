@@ -16,7 +16,7 @@ import com.rodrigohf.apicompras.domain.Produto;
 public interface ProdutoRepository extends JpaRepository<Produto, Long>{
 	
 	@Transactional(readOnly=true)
-	@Query(value="SELECT * FROM PRODUTO  WHERE NOME LIKE %:nome%" , nativeQuery = true) //ilike ignora case sensitive
+	@Query(value="SELECT p FROM PRODUTO p WHERE p.NOME LIKE %:nome%" , nativeQuery = true) //ilike ignora case sensitive
 	Page<Produto> listarProdutoPorNome(@Param(value="nome")String nome, PageRequest pageRequest);
 	
 	

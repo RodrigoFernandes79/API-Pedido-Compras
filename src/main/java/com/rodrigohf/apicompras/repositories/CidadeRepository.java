@@ -13,7 +13,7 @@ import com.rodrigohf.apicompras.domain.Cidade;
 @Repository
 public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 	@Transactional(readOnly = true)
-	@Query(value = "SELECT * FROM cidade WHERE estado_id = :estado_id", nativeQuery = true)
+	@Query(value = "SELECT c FROM cidade c WHERE u.estado_id = :estado_id", nativeQuery = true)
 	List<Cidade> findCidades(@Param(value = "estado_id") Long estado_id);
 
 	

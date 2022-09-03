@@ -15,7 +15,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 	public Cliente findByEmail(String email);
 	
 	@Transactional(readOnly=true)
-	@Query(value = "SELECT * FROM cliente WHERE cpf_ou_cnpj = :cpf_ou_cnpj", nativeQuery = true)
+	@Query(value = "SELECT c FROM cliente c WHERE c.cpf_ou_cnpj = :cpf_ou_cnpj", nativeQuery = true)
 	public Cliente findByCpfOuCnpj(@Param(value = "cpf_ou_cnpj")String cpf_ou_cnpj);
 	
 
